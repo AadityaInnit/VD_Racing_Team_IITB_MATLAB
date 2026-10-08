@@ -1,0 +1,35 @@
+function c = transient_skidpad_config()
+%TRANSIENT_SKIDPAD_CONFIG Settings for the independent dynamic experiment.
+data = load(fullfile(fileparts(mfilename('fullpath')),'data','ggv_lts_lookup.mat'),'ggvLUT');
+c.vehicle = data.ggvLUT.vehicle;
+c.vehicle.Iz = c.vehicle.m*c.vehicle.a*c.vehicle.b;
+c.yawInertiaSource = "Estimate m*a*b; replace with measured yaw inertia";
+c.allowNominalGGV = false; % Sweeps explicitly enable a fixed reference GGV.
+c.powerLimit = data.ggvLUT.P_max;
+c.driveType = string(data.ggvLUT.drive_type);
+c.radius = 9.25;
+c.nStations = 600;
+c.startMode = "standing";
+c.entrySpeed = 0;
+c.speedScale = 1.0; % Full equilibrium GGV target; set 0.9 for a margin.
+c.speedSchedule = [0 1; 1 1]; % [lap fraction, multiplier], for braking tests.
+c.maxTime = 20;
+c.maxStep = 0.01;
+c.relTol = 1e-6;
+c.absTol = 1e-8;
+c.trackHalfWidth = 0.75;
+c.maxSideslip = deg2rad(35);
+c.steerLimit = deg2rad(40);
+c.steerRateLimit = deg2rad(180);
+c.steerTimeConstant = 0.05;
+c.courseGain = 1.8;
+c.lateralGain = 0.25; % steering rad per metre of leftward path error
+c.yawGain = 0.12;     % steering rad per rad/s yaw-rate error
+c.speedGain = 3.0;
+c.brakeBiasFront = 0.60;
+c.lowSpeedBlend = 0.20; % smoothly remove rolling lateral force at rest
+c.initialSideslipOffset = 0;
+c.initialYawRateOffset = 0;
+c.initialLateralError = 0;
+c.makePlots = true;
+end
